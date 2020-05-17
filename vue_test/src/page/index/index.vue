@@ -1,103 +1,8 @@
 <template>
   <div class="index">
-    <div class="user-info rel" id="user_info">
-      <div>
-        <b class="index-title">代理中心</b>
-      </div>
-      <span id="exit_login" @click="exit">退出</span>
-      <div class="login-info c-bg-w">
-        <el-row class="demo-avatar demo-basic">
-          <el-col :span="24">
-            <div class="demo-basic--circle">
-              <div class="block user-img">
-                <el-avatar :size="50" :src="headimgUrl"></el-avatar>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <div class="nick-name">{{nickName}}</div>
-        <div class="user-type">
-          <span>{{userType}}</span>
-        </div>
-      </div>
-    </div>
-    <div class="quick-entry base-entry" id="_index_item">
-      <p>类目</p>
-      <el-row class="index-content">
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-s-custom"></i>
-            <p>玩家</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-s-shop"></i>
-            <p>房卡</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-close-notification"></i>
-            <p>编辑公告</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-delete"></i>
-            <p>公会</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-document-add"></i>
-            <p>提现审批</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-document-checked"></i>
-            <p>提现记录</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-set-up"></i>
-            <p>汇总</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-mobile-phone"></i>
-            <p>绑定账号</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content">
-            <i class="el-icon-unlock"></i>
-            <p>修改密码</p>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-    <el-row :gutter="10">
-      <el-col :span="24">
-        <el-menu default-active="1" class="el-menu-vertical-demo bottom">
-          <el-menu-item index="1" to class="bottom-menu">
-            <i class="el-icon-s-home"></i>
-            <span>首页</span>
-          </el-menu-item>
-          <el-menu-item index="2" to class="bottom-menu">
-            <i class="el-icon-pie-chart"></i>
-            <span>游戏统计</span>
-          </el-menu-item>
-          <el-menu-item index="3" to class="bottom-menu">
-            <i class="el-icon-sell"></i>
-            <span>充值统计</span>
-          </el-menu-item>
-        </el-menu>
-      </el-col>
-    </el-row>
+    <index-header :userInfo="userInfo"></index-header>
+    <index-class></index-class>
+    <bottom-nav></bottom-nav>
   </div>
 </template>
 
@@ -105,13 +10,19 @@
 import storage from '@/utils/storage.js'
 import config from '@/utils/config.js'
 import { firstOrDefault } from '@/request/api'
+import BottomNav from '../../components/BottomNav'
+import IndexHeader from './components/IndexHeader'
+import IndexClass from './components/IndexClass'
 export default {
   name: 'Index',
+  components: {
+    BottomNav,
+    IndexHeader,
+    IndexClass
+  },
   data () {
     return {
-      headimgUrl: '',
-      nickName: '',
-      userType: ''
+      userInfo: {}
     }
   },
   created () {
@@ -121,12 +32,9 @@ export default {
   methods: {
     getData () {
       var userInfo = storage.get('userInfo')
-      firstOrDefault({ userName: userInfo.account, partnerId: 16 }).then(
+      firstOrDefault({ userName: userInfo.userName, partnerId: config.partnerId }).then(
         res => {
-          this.headimgUrl =
-            config.serverIp + 'upload/headimg/' + res.Data.UserId + '.jpg'
-          this.nickName = res.Data.NickName
-          this.userType = config.userTypeName[res.Data.TypeId]
+          this.userInfo = res.Data
         }
       )
     },
@@ -155,13 +63,15 @@ export default {
   text-decoration: underline;
 }
 .user-info {
-  height: 10rem;
   padding-top: 0.8rem;
   background-image: -webkit-linear-gradient(top, #0094ff, #18b6ed);
 }
 .user-img {
   text-align: center;
-  margin-top: 30px;
+  margin-top: 10px;
+}
+.user-img span{
+  border: solid 2px #fff;
 }
 .nick-name,
 .user-type {
@@ -170,11 +80,13 @@ export default {
 }
 .user-type {
   margin-top: 0.6rem;
+  padding-bottom: 2.5rem;
 }
 .user-type > span {
   background: red;
   border-radius: 4rem;
   padding: 0.2rem 0.5rem;
+  font-size: .8rem;
 }
 #_index .user-info .login-info {
   margin: 10px 30px 0px 30px;
@@ -227,30 +139,9 @@ export default {
 #_index_item .grid-content i {
   padding: 10px;
   color: #18b4ed;
+  font-size: 1.5rem;
 }
 #_index_item .grid-content p {
-  font-size: 1rem;
-}
-.bottom {
-  background: #eee;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  border-top: solid 1px #ccc;
-}
-
-.bottom .bottom-menu {
-  text-align: center;
-  width: 33%;
-}
-.bottom .bottom-menu > i,
-.bottom .bottom-menu > span {
-  display: block;
-  width: 100%;
-  margin-top: 8px;
-}
-.bottom .bottom-menu > span {
-  line-height: 20px;
+  font-size: .8rem;
 }
 </style>

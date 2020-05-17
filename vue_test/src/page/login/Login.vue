@@ -79,7 +79,7 @@ export default {
       }
       var data = {
         userName: this.account,
-        partnerId: 16,
+        partnerId: 9,
         password: this.password
       }
       // eslint-disable-next-line
@@ -91,14 +91,18 @@ export default {
             callback: active => { }
           })
         } else {
-          firstOrDefault({userName: res.Data.Data.UserName, partnerId: 16}).then(res => {
+          firstOrDefault({userName: res.Data.Data.UserName, partnerId: 9}).then(res => {
             var userInfo = {
-              account: res.Data.UserName,
-              password: this.password
+              userName: res.Data.UserName,
+              password: this.password,
+              id: res.Data.UserId,
+              typeId: res.Data.TypeId,
+              nickName: res.Data.NickName,
+              gold: res.Data.Gold
             }
             storage.set('userInfo', userInfo)
             if (res.Data.TypeId < config.userType.Gamer) {
-              this.$router.push({ path: `/index` })
+              this.$router.push({ path: `/indexRouter` })
             } else {
               this.$alert('非管理员权限', '提示', {
                 confirmButtonText: '确定',

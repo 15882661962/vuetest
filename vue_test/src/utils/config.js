@@ -1,18 +1,20 @@
 var config = {
   serverIp: 'http://www.7uao.com/',
-  partnerId: {
-    PJ: 3,
-    WZ: 4,
-    JX: 5,
-    YW: 6,
-    DY: 7,
-    HG: 8,
-    XXN: 10,
-    BYJ: 14,
-    NQCT: 15,
-    TTQP: 16,
-    XHQP: 19
-  },
+  partnerId: 9,
+  // partnerId: {
+  //   PJ: 3,
+  //   WZ: 4,
+  //   JX: 5,
+  //   YW: 6,
+  //   DY: 7,
+  //   HG: 8,
+  //   PJQP: 9,
+  //   XXN: 10,
+  //   BYJ: 14,
+  //   NQCT: 15,
+  //   TTQP: 16,
+  //   XHQP: 19
+  // },
   gameId: {
     DDZ: 1,
     SSS: 2,
@@ -29,7 +31,6 @@ var config = {
     KZZ: 15
   },
   gameName: {
-    '-1': '全部游戏',
     1: '斗地主',
     2: '江阴罗松',
     3: '浦江麻将',
@@ -52,6 +53,7 @@ var config = {
     6: [1, 2, 8, 9],
     7: [1, 2, 8, 10],
     8: [2, 8],
+    9: [3],
     10: [7],
     14: [1, 7, 14],
     15: [7],
